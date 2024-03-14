@@ -3,7 +3,7 @@ import {TaskType} from "../App";
 
 
 type TodoAddPropsType = {
-    add:(deed:TaskType)=>void
+    add: (deed: TaskType) => void
 }
 
 export class TodoAdd extends Component <any> {
@@ -12,7 +12,7 @@ export class TodoAdd extends Component <any> {
     constructor(props: TodoAddPropsType) {
         super(props);
         this.handleTitleChange = this.handleTitleChange.bind(this);
-        this.handleDescoChange = this.handleDescoChange.bind(this);
+        this.handleDescChange = this.handleDescChange.bind(this);
         this.handleImageChange = this.handleImageChange.bind(this);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.clearFormData();
@@ -27,10 +27,10 @@ export class TodoAdd extends Component <any> {
     }
 
     handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
-        this.formData.title = e.currentTarget.title
+        this.formData.title = e.currentTarget.value
     }
 
-    handleDescoChange(e: ChangeEvent<HTMLInputElement>) {
+    handleDescChange(e: ChangeEvent<HTMLTextAreaElement>) {
         this.formData.desc = e.currentTarget.value
     }
 
@@ -74,29 +74,30 @@ export class TodoAdd extends Component <any> {
                     <div className="field">
                         <label className="lable">Примечание</label>
                         <div className="control">
-                            <input className="input" onChange={this.handleDescoChange}/>
+                            <textarea className="input" onChange={this.handleDescChange}></textarea>
                         </div>
                     </div>
                     <div className="field">
-                        <label className="lable">Примечание</label>
-                        <div className="control">
-                            <input type="file"
-                                   accept='/imagr/*'
-                                   className="file-input"
-                                   onChange={this.handleDescoChange}/>
-                            <span className="file-cta">
+                        <div className="file">
+                            <label className="file-label">
+                                <input type="file"
+                                       accept="/imagr/*"
+                                       className="file-input"
+                                       onChange={this.handleImageChange}/>
+                                <span className="file-cta">
                                 <span className="file-lable">
                                     Графическая иллюстрация...
                                 </span>
                             </span>
+                            </label>
                         </div>
                     </div>
                     <div className="field is-grouped is-grouped-right">
                         <div className="control">
-                            <input type="reset" className="button is-link is-light" value='Сборс'/>
+                            <input type="reset" className="button is-link is-light" value="Сборс"/>
                         </div>
                         <div className="control">
-                            <input type="submit" className="button is-primary" value='Создать дело'/>
+                            <input type="submit" className="button is-primary" value="Создать дело"/>
                         </div>
                     </div>
                 </form>
