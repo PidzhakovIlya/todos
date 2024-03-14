@@ -24,11 +24,11 @@ export function Todolist(props: TodoPropsTyp) {
                             <button className="button is-success"
                                     title="Поместить как сделанное"
                                     disabled={t.done}
-                                    onClick={() => props.setDown(t.key)}>&#9745;</button>
+                                    onClick={() => props.setDown(t.key|| new Date().getTime())}>&#9745;</button>
                         </td>
                         <td>
                             <button className="button is-danger" title="Удалить"
-                                    onClick={() => props.delete(t.key)}>&#9746;</button>
+                                    onClick={() => props.delete(t.key ||  new Date().getTime())}>&#9746;</button>
                         </td>
                     </tr>
                 ))}

@@ -1,5 +1,6 @@
 import React from "react";
 import {Todolist} from "./Todolist";
+import {TodoAdd} from "./components/TodoAdd";
 
 const date1 = new Date(2024, 3, 14, 14, 5)
 const date2 = new Date(2024, 3, 14, 15, 5)
@@ -7,13 +8,13 @@ const date2 = new Date(2024, 3, 14, 15, 5)
 export type InitialDataType = Array<TaskType>
 export type InitialStateType = { data: Array<TaskType> }
 
-type TaskType = {
-    title: string
-    desc: string
-    image: string
-    done: boolean
-    createdAt: string
-    key: number
+export type TaskType = {
+    title?: string
+    desc?: string
+    image?: string
+    done?: boolean
+    createdAt?: string
+    key?: number
 }
 
 const initialData: InitialDataType = [
@@ -35,6 +36,8 @@ const initialData: InitialDataType = [
     }
 ]
 
+
+
 class App extends React.Component<any, InitialStateType> {
     state: InitialStateType
 
@@ -43,18 +46,24 @@ class App extends React.Component<any, InitialStateType> {
         this.state = {data: initialData}
         this.setDown = this.setDown.bind(this)
         this.delete = this.delete.bind(this)
+        this.add = this.add.bind(this)
     }
+
+    add(deed:TaskType){
+        this.state.data.push(deed)
+        this.setState(()=>({}))
+    };
 
     delete(key: number) {
         const newData = this.state.data.filter(t => t.key !== key)
         this.setState({data: newData})
-    }
+    };
 
     setDown(key: number) {
         const deed: TaskType = this.state.data.find((t: any) => t.key === key) as TaskType
         if (deed) deed.done = true;
         this.setState((state: InitialStateType) => ({}))
-    }
+    };
 
     render() {
         return (
@@ -70,6 +79,7 @@ class App extends React.Component<any, InitialStateType> {
                     <Todolist list={this.state.data}
                               setDown={this.setDown}
                               delete={this.delete}/>
+                    <TodoAdd add={this.add}/>
                 </main>
             </div>
         );
