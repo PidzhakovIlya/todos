@@ -1,4 +1,4 @@
-import React from "react";
+import React, {MouseEvent} from "react";
 import {Todolist} from "./Todolist";
 import {TodoAdd} from "./components/TodoAdd";
 import {HashRouter, NavLink, Route, Routes} from "react-router-dom";
@@ -7,7 +7,10 @@ const date1 = new Date(2024, 3, 14, 14, 5)
 const date2 = new Date(2024, 3, 14, 15, 5)
 
 export type InitialDataType = Array<TaskType>
-export type InitialStateType = { data: Array<TaskType> }
+export type InitialStateType = {
+    data: Array<TaskType>,
+    showMenu: boolean
+}
 
 export type TaskType = {
     title?: string
@@ -43,10 +46,16 @@ class App extends React.Component<any, InitialStateType> {
 
     constructor(props: any) {
         super(props);
-        this.state = {data: initialData}
+        this.state = {data: initialData, showMenu: false}
         this.setDown = this.setDown.bind(this)
         this.delete = this.delete.bind(this)
         this.add = this.add.bind(this)
+        this.showMenu = this.showMenu.bind(this)
+    }
+
+    showMenu(e: MouseEvent<HTMLAnchorElement | HTMLDivElement>) {
+        e.preventDefault();
+        this.setState((state) => ({showMenu: !state.showMenu}))
     }
 
     add(deed: TaskType) {
@@ -77,13 +86,22 @@ class App extends React.Component<any, InitialStateType> {
                             Todos
                         </NavLink>
                     </div>
-                    <div className="navbar-menu">
-                        <div className="navbar-start">
-                            <NavLink to='/add' className={({isActive})=>'navbar-item' + (isActive?
-                             ' is-active':'')}>
-                                Новая задача
-                            </NavLink>
-                        </div>
+                    <div className="navbar-start">
+
+                        <a href='/'
+                           className={this.state.showMenu ? 'navbar-burger is-active' : 'navbar-burger'}
+                           onClick={this.showMenu}>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </a>
+                    </div>
+                    <div className={this.state.showMenu ? "navbar-menu is-active" : 'navbar-menu'}
+                         onClick={this.showMenu}>
+                        <NavLink to='/add' className={({isActive}) => 'navbar-item' + (isActive ?
+                            ' is-active' : '')}>
+                            Новая задача
+                        </NavLink>
                     </div>
                 </nav>
                 <main className="content px-6 mt-6">
