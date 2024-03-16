@@ -1,6 +1,7 @@
 import React from "react";
 import {Todolist} from "./Todolist";
 import {TodoAdd} from "./components/TodoAdd";
+import {HashRouter, NavLink, Route, Routes} from "react-router-dom";
 
 const date1 = new Date(2024, 3, 14, 14, 5)
 const date2 = new Date(2024, 3, 14, 15, 5)
@@ -37,7 +38,6 @@ const initialData: InitialDataType = [
 ]
 
 
-
 class App extends React.Component<any, InitialStateType> {
     state: InitialStateType
 
@@ -49,9 +49,9 @@ class App extends React.Component<any, InitialStateType> {
         this.add = this.add.bind(this)
     }
 
-    add(deed:TaskType){
+    add(deed: TaskType) {
         this.state.data.push(deed)
-        this.setState(()=>({}))
+        this.setState(() => ({}))
     };
 
     delete(key: number) {
@@ -67,21 +67,38 @@ class App extends React.Component<any, InitialStateType> {
 
     render() {
         return (
-            <div>
+
+            <HashRouter>
                 <nav className="navbar is-light ">
                     <div className="navbar-brand">
-        <span className={"navbar-item is-uppercase"}>
-            Todos
-        </span>
+                        <NavLink to='/'
+                                 className={({isActive}) =>
+                                     'navbar-item is-uppercase' + (isActive ? ' is-active' : '')}>
+                            Todos
+                        </NavLink>
+                    </div>
+                    <div className="navbar-menu">
+                        <div className="navbar-start">
+                            <NavLink to='/add' className={({isActive})=>'navbar-item' + (isActive?
+                             ' is-active':'')}>
+                                Новая задача
+                            </NavLink>
+                        </div>
                     </div>
                 </nav>
                 <main className="content px-6 mt-6">
-                    <Todolist list={this.state.data}
-                              setDown={this.setDown}
-                              delete={this.delete}/>
-                    <TodoAdd add={this.add}/>
+                    {/*<Todolist list={this.state.data}*/}
+                    {/*          setDown={this.setDown}*/}
+                    {/*          delete={this.delete}/>*/}
+                    {/*<TodoAdd add={this.add}/>*/}
+                    <Routes>
+                        <Route path='/' element={<Todolist list={this.state.data}
+                                                           setDown={this.setDown}
+                                                           delete={this.delete}/>}/>
+                        <Route path='/add' element={<TodoAdd add={this.add}/>}/>
+                    </Routes>
                 </main>
-            </div>
+            </HashRouter>
         );
     }
 }
