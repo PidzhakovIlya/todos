@@ -85,9 +85,6 @@ class App extends React.Component<any, InitialStateType> {
                                      'navbar-item is-uppercase' + (isActive ? ' is-active' : '')}>
                             Todos
                         </NavLink>
-                    </div>
-                    <div className="navbar-start">
-
                         <a href='/'
                            className={this.state.showMenu ? 'navbar-burger is-active' : 'navbar-burger'}
                            onClick={this.showMenu}>
@@ -98,10 +95,14 @@ class App extends React.Component<any, InitialStateType> {
                     </div>
                     <div className={this.state.showMenu ? "navbar-menu is-active" : 'navbar-menu'}
                          onClick={this.showMenu}>
-                        <NavLink to='/add' className={({isActive}) => 'navbar-item' + (isActive ?
-                            ' is-active' : '')}>
-                            Новая задача
-                        </NavLink>
+                        <div className="navbar-start">
+                            <NavLink to='/add' className={({isActive}) => 'navbar-item' + (isActive ?
+                                ' is-active' : '')}>
+                                Новая задача
+                            </NavLink>
+
+                        </div>
+
                     </div>
                 </nav>
                 <main className="content px-6 mt-6">
