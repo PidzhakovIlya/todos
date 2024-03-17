@@ -1,5 +1,6 @@
 import React from "react";
 import {InitialDataType} from "./App";
+import {Link} from "react-router-dom";
 
 
 type TodoPropsTyp = {
@@ -17,8 +18,10 @@ export function Todolist(props: TodoPropsTyp) {
                 {props.list.map(t => (
                     <tr key={t.key}>
                         <td>
+                            <Link to={`/${t.key}`}>
                             {t.done && <del>{t.title}</del>}
                             {!t.done && t.title}
+                            </Link>
                         </td>
                         <td>
                             <button className="button is-success"

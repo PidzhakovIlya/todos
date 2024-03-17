@@ -2,6 +2,7 @@ import React, {MouseEvent} from "react";
 import {Todolist} from "./Todolist";
 import {TodoAdd} from "./components/TodoAdd";
 import {HashRouter, NavLink, Route, Routes} from "react-router-dom";
+import {TodoDetail} from "./components/TodoDetail";
 
 const date1 = new Date(2024, 3, 14, 14, 5)
 const date2 = new Date(2024, 3, 14, 15, 5)
@@ -32,7 +33,7 @@ const initialData: InitialDataType = [
     },
     {
         title: "Изучить классы",
-        desc: "Побыстрее",
+        desc: "Хорошо",
         image: "",
         done: false,
         createdAt: date2.toLocaleDateString(),
@@ -51,6 +52,12 @@ class App extends React.Component<any, InitialStateType> {
         this.delete = this.delete.bind(this)
         this.add = this.add.bind(this)
         this.showMenu = this.showMenu.bind(this)
+        this.getDeed = this.getDeed.bind(this)
+    }
+
+    getDeed(key: number) {
+            key = +key;
+            return this.state.data.find(d => d.key === key)
     }
 
     showMenu(e: MouseEvent<HTMLAnchorElement | HTMLDivElement>) {
@@ -115,6 +122,7 @@ class App extends React.Component<any, InitialStateType> {
                                                            setDown={this.setDown}
                                                            delete={this.delete}/>}/>
                         <Route path='/add' element={<TodoAdd add={this.add}/>}/>
+                        <Route path='/:key' element={<TodoDetail getDeed={this.getDeed}/>}/>
                     </Routes>
                 </main>
             </HashRouter>
