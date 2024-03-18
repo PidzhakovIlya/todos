@@ -1,5 +1,6 @@
 import {ChangeEvent, Component, FormEvent} from "react";
 import {TaskType} from "../App";
+import {Navigate} from "react-router-dom";
 
 
 type TodoAddPropsType = {
@@ -8,7 +9,7 @@ type TodoAddPropsType = {
 
 export class TodoAdd extends Component <any> {
     formData: TaskType = {}
-
+    state = {redirect:false}
     constructor(props: TodoAddPropsType) {
         super(props);
         this.handleTitleChange = this.handleTitleChange.bind(this);
@@ -56,11 +57,14 @@ export class TodoAdd extends Component <any> {
         newDeed.createdAt = date.toLocaleDateString();
         newDeed.key = date.getTime();
         this.props.add(newDeed);
-        this.clearFormData();
-        e.currentTarget.reset();
+        // this.clearFormData();
+        // e.currentTarget.reset();
+        this.setState((state)=>({redirect:true}))
     }
-
     render() {
+        if(this.state.redirect){
+            return <Navigate to='/'/>
+        }else
         return (
             <section>
                 <h1>Создфть новую задачу</h1>
