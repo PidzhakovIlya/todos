@@ -4,9 +4,10 @@ import {Navigate} from "react-router-dom";
 
 
 type RegisterPropsType = {}
-type FormDataType = {
-    email: string
-    password: string
+
+export type FormDataType = {
+    email: string | null
+    password?: string
 }
 
 export class Register extends React.Component<any> {
