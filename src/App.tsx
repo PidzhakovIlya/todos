@@ -6,6 +6,8 @@ import {TodoDetail} from "./components/TodoDetail";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import firebaseApp from "./firebase";
 import {FormDataType, Register} from "./components/Register/Register";
+import {Login} from "./components/Login";
+import {Logout} from "./components/Logout";
 
 
 const date1 = new Date(2024, 3, 14, 14, 5)
@@ -89,7 +91,7 @@ class App extends React.Component<any, InitialStateType> {
         this.authStateChanged = this.authStateChanged.bind(this)
     }
 
-    authStateChanged(user:FormDataType | null ) {
+    authStateChanged(user: FormDataType | null) {
         this.setState((state) => ({currentUser: user}))
     }
 
@@ -120,13 +122,13 @@ class App extends React.Component<any, InitialStateType> {
     };
 
     componentDidMount() {
-         // firebase.auth().onAuthStateChanged((user)=> {
-         //     debugger
-         //             if (user) {
-         //                 this.authStateChanged(user)
-         //             }
-         //
-         //         } )
+        // firebase.auth().onAuthStateChanged((user)=> {
+        //     debugger
+        //             if (user) {
+        //                 this.authStateChanged(user)
+        //             }
+        //
+        //         } )
         onAuthStateChanged(getAuth(firebaseApp), this.authStateChanged)
     }
 
@@ -157,12 +159,23 @@ class App extends React.Component<any, InitialStateType> {
                                     ' is-active' : '')}>
                                     Новая задача
                                 </NavLink>}
+                            {!this.state.currentUser && (<NavLink to='/login'
+                                                                  className={({isActive}) => 'navbar-item' + (isActive ? ' isActive' : '')}
+                            >
+                                Войти
+                            </NavLink>)}
                             {!this.state.currentUser && <NavLink to='/register' className={({isActive}) =>
-                                'navbar-item' + isActive ? ' isActive' : ''}>
+                                'navbar-item' +( isActive ? ' isActive' : '')}>
                                 Зарегистрироваться
                             </NavLink>}
                         </div>
-
+                        {this.state.currentUser && (<div className='navbar-end'>
+                            <NavLink to="/logout"
+                                     className={({isActive}) => 'navbar-item' + (isActive ? ' isActive' : '')}
+                            >
+                                Выйти
+                            </NavLink>
+                        </div>)}
                     </div>
                 </nav>
                 <main className="content px-6 mt-6">
@@ -177,6 +190,8 @@ class App extends React.Component<any, InitialStateType> {
                         <Route path='/add' element={<TodoAdd add={this.add}/>}/>
                         <Route path='/:key' element={<TodoDetail getDeed={this.getDeed}/>}/>
                         <Route path='/register' element={<Register currentUser={this.state.currentUser}/>}/>
+                        <Route path='/login' element={<Login currentUser={this.state.currentUser}/>}/>
+                        <Route path='/logout' element={<Logout currentUser={this.state.currentUser}/>}/>
                     </Routes>
                 </main>
             </HashRouter>
