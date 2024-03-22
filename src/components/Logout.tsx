@@ -11,6 +11,7 @@ export const Logout = (props: LogoutPropsType) => {
        logout()
        return null
    }else{
-       <Navigate to='/login' replace/>
+       return <Navigate to='/login' replace/>
+
    }
 };
