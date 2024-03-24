@@ -1,26 +1,25 @@
 import React, {MouseEvent} from "react";
 import {Todolist} from "./Todolist";
-import {TodoAdd} from "./components/TodoAdd";
+import {FormDataType, TodoAdd} from "./components/TodoAdd";
 import {HashRouter, NavLink, Route, Routes} from "react-router-dom";
 import {TodoDetail} from "./components/TodoDetail";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import firebaseApp from "./firebase";
-import {FormDataType, Register} from "./components/Register/Register";
+import { Register} from "./components/Register/Register";
 import {Login} from "./components/Login";
 import {Logout} from "./components/Logout";
+import {del, getList, setDone} from "./api/api";
+import {UserInfo} from "@firebase/auth";
 
-
-const date1 = new Date(2024, 3, 14, 14, 5)
-const date2 = new Date(2024, 3, 14, 15, 5)
 
 export type InitialDataType = Array<TaskType>
 export type InitialStateType = {
     data: Array<TaskType>,
     showMenu: boolean
-    currentUser: undefined | FormDataType | null
+    currentUser: undefined | FormDataType | null | UserInfo | any // какаето фигнф нужно разобраться
 }
 
-export type TaskType = {
+export type TaskType = UserInfo & {
     title?: string
     desc?: string
     image?: string
@@ -29,31 +28,31 @@ export type TaskType = {
     key?: number
 }
 
-const initialData: InitialDataType = [
-    {
-        title: "Learn React",
-        desc: "Побыстрее",
-        image: "",
-        done: true,
-        createdAt: date1.toLocaleDateString(),
-        key: date1.getTime()
-    },
-    {
-        title: "Изучить классы",
-        desc: "Хорошо",
-        image: "",
-        done: false,
-        createdAt: date2.toLocaleDateString(),
-        key: date2.getTime()
-    }
-]
+// const initialData: InitialDataType = [
+//     {
+//         title: "Learn React",
+//         desc: "Побыстрее",
+//         image: "",
+//         done: true,
+//         createdAt: date1.toLocaleDateString(),
+//         key: date1.getTime()
+//     },
+//     {
+//         title: "Изучить классы",
+//         desc: "Хорошо",
+//         image: "",
+//         done: false,
+//         createdAt: date2.toLocaleDateString(),
+//         key: date2.getTime()
+//     }
+// ]
 
 export interface Root {
     uid: string
     email: string
     emailVerified: boolean
     isAnonymous: boolean
-    providerData: ProviderDaum[]
+    providerData: TaskType[]
     stsTokenManager: StsTokenManager
     createdAt: string
     lastLoginAt: string
@@ -61,14 +60,15 @@ export interface Root {
     appName: string
 }
 
-export interface ProviderDaum {
-    providerId: string
-    uid: string
-    displayName: any
-    email: string
-    phoneNumber: any
-    photoURL: any
-}
+
+// export interface ProviderDaum {
+//     providerId: string
+//     uid: string
+//     displayName: any
+//     email: string
+//     phoneNumber: any
+//     photoURL: any
+// }
 
 export interface StsTokenManager {
     refreshToken: string
@@ -82,7 +82,7 @@ class App extends React.Component<any, InitialStateType> {
 
     constructor(props: any) {
         super(props);
-        this.state = {data: initialData, showMenu: false, currentUser: undefined}
+        this.state = {data: [], showMenu: false, currentUser: undefined}
         this.setDown = this.setDown.bind(this)
         this.delete = this.delete.bind(this)
         this.add = this.add.bind(this)
@@ -91,12 +91,17 @@ class App extends React.Component<any, InitialStateType> {
         this.authStateChanged = this.authStateChanged.bind(this)
     }
 
-    authStateChanged(user: FormDataType | null) {
+    async authStateChanged(user: UserInfo | null) {
         this.setState((state) => ({currentUser: user}))
+        if(user){
+            const newData = await getList(user)
+            this.setState((state)=>( {data: newData}))
+        }else{
+            this.setState((state)=>({data: []}))
+        }
     }
 
     getDeed(key: number) {
-        key = +key;
         return this.state.data.find(d => d.key === key)
     }
 
@@ -110,13 +115,15 @@ class App extends React.Component<any, InitialStateType> {
         this.setState(() => ({}))
     };
 
-    delete(key: number) {
+    async delete(key: number) {
+        await del(this.state.currentUser, key)
         const newData = this.state.data.filter(t => t.key !== key)
         this.setState({data: newData})
     };
 
-    setDown(key: number) {
-        const deed: TaskType = this.state.data.find((t: any) => t.key === key) as TaskType
+    async setDown(key: number) {
+        await setDone(this.state.currentUser, key)
+        const deed: TaskType = this.state.data.find((t) => t.key === key) as TaskType
         if (deed) deed.done = true;
         this.setState((state: InitialStateType) => ({}))
     };
@@ -187,7 +194,7 @@ class App extends React.Component<any, InitialStateType> {
                         <Route path='/' element={<Todolist list={this.state.data}
                                                            setDown={this.setDown}
                                                            delete={this.delete}/>}/>
-                        <Route path='/add' element={<TodoAdd add={this.add}/>}/>
+                        <Route path='/add' element={<TodoAdd add={this.add} currentUser={this.state.currentUser}/>}/>
                         <Route path='/:key' element={<TodoDetail getDeed={this.getDeed}/>}/>
                         <Route path='/register' element={<Register currentUser={this.state.currentUser}/>}/>
                         <Route path='/login' element={<Login currentUser={this.state.currentUser}/>}/>

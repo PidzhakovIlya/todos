@@ -1,14 +1,16 @@
 import React, {ChangeEvent, FormEvent} from 'react';
 import {register} from "../../auth/auth";
 import {Navigate} from "react-router-dom";
+import {FormDataType} from "../TodoAdd";
 
 
 type RegisterPropsType = {}
 
-export type FormDataType = {
-    email: string | null
-    password?: string
-}
+// export type FormDataType = {
+//     email: string | null
+//     password?: string
+//     title?:string
+// }
 
 export class Register extends React.Component<any> {
     formData: FormDataType = {

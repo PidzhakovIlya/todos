@@ -1,9 +1,15 @@
 import {getAuth, signInWithEmailAndPassword, signOut} from "firebase/auth"
+import {getDatabase, push, ref, set, get, query, remove} from "firebase/database"
+import {UserInfo} from "@firebase/auth";
+import {FormDataType} from "../components/TodoAdd";
 
-export async function login(email: string, password: string) {
+export async function login(email: string | null | undefined, password: string | undefined ) {
     try {
-        const oUC = await signInWithEmailAndPassword(getAuth(), email, password);
-        return oUC.user
+        if (email && password) {
+            const oUC = await signInWithEmailAndPassword(getAuth(), email, password);
+            return oUC.user
+        }
+
     } catch (err: any) {
         return err.code
     }
@@ -11,4 +17,37 @@ export async function login(email: string, password: string) {
 
 export const logout = async () => {
     await signOut(getAuth());
+}
+
+export const add = async (user: UserInfo, deed: FormDataType) => {
+    const oRef = await push(
+        ref(
+            getDatabase(),
+            `users/${user.uid}/todos`
+        )
+    )
+    await set(oRef, deed);
+    const oSnapshot = await get(query(oRef));
+    const oDeed = oSnapshot.val();
+    oDeed.key = oRef.key;
+    return oDeed
+}
+
+export const getList = async (user:UserInfo)=>{
+    const oSnapshot = await get(query(ref(getDatabase(), `users/${user.uid}/todos`)));
+    const oArr:UserInfo[] = [];
+    let oDeed;
+    oSnapshot.forEach(oDoc=> {
+        oDeed = oDoc.val();
+        oDeed.key = oDoc.key
+        oArr.push(oDeed)
+    });
+    return oArr;
+}
+
+export const setDone = (user:UserInfo, key:number)=>{
+    return set(ref(getDatabase(), `users/${user.uid}/todos/${key}/done`), true)
+}
+export const del = (user:UserInfo, key:number)=>{
+    return remove(ref(getDatabase(), `users/${user.uid}/todos/${key}/done`))
 }

@@ -1,14 +1,10 @@
 import React, {ChangeEvent, FormEvent} from 'react';
 import {Navigate} from "react-router-dom";
-import {register} from "../auth/auth";
+import {login} from "../api/api";
+import {FormDataType} from "./TodoAdd";
 
 
 type RegisterPropsType = {}
-
-export type FormDataType = {
-    email: string | null
-    password?: string
-}
 
 export class Login extends React.Component<any> {
     formData: FormDataType = {
@@ -41,7 +37,7 @@ export class Login extends React.Component<any> {
 
     async handleFormSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const result = await register(this.formData.email, this.formData.password);
+        const result = await login(this.formData.email, this.formData.password);
         if (typeof result === 'object') console.log(result)
     }
 
