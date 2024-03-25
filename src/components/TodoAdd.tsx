@@ -87,13 +87,13 @@ export class TodoAdd extends Component <any> {
                     <h1>Создфть новую задачу</h1>
                     <form onSubmit={this.handleFormSubmit}>
                         <div className="field">
-                            <label className="lable">Заголовок</label>
+                            <label className="label">Заголовок</label>
                             <div className="conrtrol">
                                 <input className="input" onChange={this.handleTitleChange}/>
                             </div>
                         </div>
                         <div className="field">
-                            <label className="lable">Примечание</label>
+                            <label className="label">Примечание</label>
                             <div className="control">
                                 <textarea className="input" onChange={this.handleDescChange}></textarea>
                             </div>

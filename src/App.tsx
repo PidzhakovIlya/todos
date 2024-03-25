@@ -92,10 +92,14 @@ class App extends React.Component<any, InitialStateType> {
     }
 
     async authStateChanged(user: UserInfo | null) {
+
         this.setState((state) => ({currentUser: user}))
         if(user){
-            const newData = await getList(user)
+            console.log(user)
+            const newData = await getList(user);
+
             this.setState((state)=>( {data: newData}))
+
         }else{
             this.setState((state)=>({data: []}))
         }

@@ -2,6 +2,7 @@ import {getAuth, signInWithEmailAndPassword, signOut} from "firebase/auth"
 import {getDatabase, push, ref, set, get, query, remove} from "firebase/database"
 import {UserInfo} from "@firebase/auth";
 import {FormDataType} from "../components/TodoAdd";
+import firebaseApp from "../firebase";
 
 export async function login(email: string | null | undefined, password: string | undefined ) {
     try {
@@ -33,7 +34,8 @@ export const add = async (user: UserInfo, deed: FormDataType) => {
     return oDeed
 }
 
-export const getList = async (user:UserInfo)=>{
+export const getList = async (user:any)=>{
+
     const oSnapshot = await get(query(ref(getDatabase(), `users/${user.uid}/todos`)));
     const oArr:UserInfo[] = [];
     let oDeed;
