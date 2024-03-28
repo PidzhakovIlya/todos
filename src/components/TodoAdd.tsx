@@ -1,5 +1,4 @@
 import {ChangeEvent, Component, FormEvent} from "react";
-import {TaskType} from "../App";
 import {Navigate} from "react-router-dom";
 import {add} from "../api/api";
 
@@ -12,12 +11,12 @@ export type FormDataType = {
     image?: string
     done?: boolean
     createdAt?: string
-    key?: number
+    key?: string
 }
 
 type TodoAddPropsType = {
     add: (deed: FormDataType) => void
-    currentUser:undefined
+    currentUser:any
 }
 
 export class TodoAdd extends Component <any> {
@@ -30,12 +29,15 @@ export class TodoAdd extends Component <any> {
 
     constructor(props: TodoAddPropsType) {
         super(props);
+
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handleDescChange = this.handleDescChange.bind(this);
         this.handleImageChange = this.handleImageChange.bind(this);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.clearFormData();
+        console.log(props.currentUser)
     }
+
 
     clearFormData() {
         this.formData = {
@@ -74,7 +76,9 @@ export class TodoAdd extends Component <any> {
         newDeed.done = false;
         newDeed.createdAt = date.toLocaleDateString();
         const addedDeed = await add(this.props.currenUser, newDeed);
+        debugger
         this.props.add(addedDeed);
+        debugger
         this.setState((state) => ({redirect: true}))
     }
 
@@ -84,7 +88,7 @@ export class TodoAdd extends Component <any> {
         } else
             return (
                 <section>
-                    <h1>Создфть новую задачу</h1>
+                    <h1>Создать новую задачу</h1>
                     <form onSubmit={this.handleFormSubmit}>
                         <div className="field">
                             <label className="label">Заголовок</label>

@@ -5,7 +5,7 @@ import {HashRouter, NavLink, Route, Routes} from "react-router-dom";
 import {TodoDetail} from "./components/TodoDetail";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import firebaseApp from "./firebase";
-import { Register} from "./components/Register/Register";
+import {Register} from "./components/Register/Register";
 import {Login} from "./components/Login";
 import {Logout} from "./components/Logout";
 import {del, getList, setDone} from "./api/api";
@@ -25,7 +25,7 @@ export type TaskType = UserInfo & {
     image?: string
     done?: boolean
     createdAt?: string
-    key?: number
+    key?: string
 }
 
 // const initialData: InitialDataType = [
@@ -105,7 +105,7 @@ class App extends React.Component<any, InitialStateType> {
         }
     }
 
-    getDeed(key: number) {
+    getDeed(key: string) {
         return this.state.data.find(d => d.key === key)
     }
 
@@ -119,13 +119,13 @@ class App extends React.Component<any, InitialStateType> {
         this.setState(() => ({}))
     };
 
-    async delete(key: number) {
+    async delete(key: string) {
         await del(this.state.currentUser, key)
         const newData = this.state.data.filter(t => t.key !== key)
         this.setState({data: newData})
     };
 
-    async setDown(key: number) {
+    async setDown(key: string) {
         await setDone(this.state.currentUser, key)
         const deed: TaskType = this.state.data.find((t) => t.key === key) as TaskType
         if (deed) deed.done = true;

@@ -5,11 +5,13 @@ export type RegisterPropsType = {
     password:string
 }
 
+const auth = getAuth()
+
 export async function register( email:string| null | undefined, password?:string) {
     try {
     if(email && password){
     const oUC = await createUserWithEmailAndPassword(
-        getAuth(),
+        auth,
         email,
         password
     )

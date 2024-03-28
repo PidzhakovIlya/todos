@@ -3,12 +3,13 @@ import {useParams} from "react-router-dom";
 import {TaskType} from "../App";
 
 type PropsType = {
-    getDeed: (key: number) => TaskType | null | undefined
+    getDeed: (key: string) => TaskType | null | undefined
 }
 
 export const TodoDetail = (props: PropsType) => {
+    console.log(typeof useParams<{key: string}>())
     const {key} = useParams<{key: string}>();
-    const deed = props.getDeed(Number(key));
+    const deed = props.getDeed(String(key));
 
     if (!deed) {
         return (

@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FormEvent} from 'react';
 import {Navigate} from "react-router-dom";
-import {login} from "../api/api";
+import {getList, login} from "../api/api";
 import {FormDataType} from "./TodoAdd";
 
 
@@ -12,8 +12,9 @@ export class Login extends React.Component<any> {
         password: ''
     }
 
-    constructor(props: RegisterPropsType) {
+    constructor(props: any) {
         super(props);
+        debugger
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);

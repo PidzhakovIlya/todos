@@ -5,8 +5,8 @@ import {Link} from "react-router-dom";
 
 type TodoPropsTyp = {
     list: InitialDataType
-    setDown: (key: number) => void
-    delete: (key: number) => void
+    setDown: (key: string) => void
+    delete: (key: string) => void
 }
 
 export function Todolist(props: TodoPropsTyp) {
@@ -27,11 +27,11 @@ export function Todolist(props: TodoPropsTyp) {
                             <button className="button is-success"
                                     title="Поместить как сделанное"
                                     disabled={t.done}
-                                    onClick={() => props.setDown(t.key|| new Date().getTime())}>&#9745;</button>
+                                    onClick={() => props.setDown(t.key|| String(new Date().getTime()))}>&#9745;</button>
                         </td>
                         <td>
                             <button className="button is-danger" title="Удалить"
-                                    onClick={() => props.delete(t.key ||  new Date().getTime())}>&#9746;</button>
+                                    onClick={() => props.delete(t.key || String(new Date().getTime()))}>&#9746;</button>
                         </td>
                     </tr>
                 ))}

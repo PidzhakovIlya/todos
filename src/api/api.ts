@@ -1,11 +1,10 @@
 import {getAuth, signInWithEmailAndPassword, signOut} from "firebase/auth"
-import {getDatabase, push, ref, set, get, query, remove} from "firebase/database"
+import {get, getDatabase, push, query, ref, remove, set} from "firebase/database"
 import {UserInfo} from "@firebase/auth";
-import {FormDataType} from "../components/TodoAdd";
-import firebaseApp from "../firebase";
 
 export async function login(email: string | null | undefined, password: string | undefined ) {
     try {
+        debugger
         if (email && password) {
             const oUC = await signInWithEmailAndPassword(getAuth(), email, password);
             return oUC.user
@@ -20,7 +19,7 @@ export const logout = async () => {
     await signOut(getAuth());
 }
 
-export const add = async (user: UserInfo, deed: FormDataType) => {
+export const add = async (user: any, deed: any) => {
     const oRef = await push(
         ref(
             getDatabase(),
@@ -34,8 +33,7 @@ export const add = async (user: UserInfo, deed: FormDataType) => {
     return oDeed
 }
 
-export const getList = async (user:any)=>{
-
+export const getList = async (user:any)=>{ debugger
     const oSnapshot = await get(query(ref(getDatabase(), `users/${user.uid}/todos`)));
     const oArr:UserInfo[] = [];
     let oDeed;
@@ -44,12 +42,13 @@ export const getList = async (user:any)=>{
         oDeed.key = oDoc.key
         oArr.push(oDeed)
     });
+
     return oArr;
 }
 
-export const setDone = (user:UserInfo, key:number)=>{
+export const setDone = (user:UserInfo, key:string)=>{
     return set(ref(getDatabase(), `users/${user.uid}/todos/${key}/done`), true)
 }
-export const del = (user:UserInfo, key:number)=>{
+export const del = (user:UserInfo, key:string)=>{
     return remove(ref(getDatabase(), `users/${user.uid}/todos/${key}/done`))
 }
