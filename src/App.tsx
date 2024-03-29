@@ -78,7 +78,7 @@ export interface StsTokenManager {
 
 
 class App extends React.Component<any, InitialStateType> {
-    // state: InitialStateType
+    state: InitialStateType
 
     constructor(props: any) {
         super(props);
