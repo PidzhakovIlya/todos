@@ -197,9 +197,10 @@ class App extends React.Component<any, InitialStateType> {
                     <Routes>
                         <Route path='/' element={<Todolist list={this.state.data}
                                                            setDown={this.setDown}
-                                                           delete={this.delete}/>}/>
+                                                           delete={this.delete}
+                                                           currentUser={this.state.currentUser}/>}/>
                         <Route path='/add' element={<TodoAdd add={this.add} currentUser={this.state.currentUser}/>}/>
-                        <Route path='/:key' element={<TodoDetail getDeed={this.getDeed}/>}/>
+                        <Route path='/:key' element={<TodoDetail getDeed={this.getDeed} currentUser={this.state.currentUser}/>}/>
                         <Route path='/register' element={<Register currentUser={this.state.currentUser}/>}/>
                         <Route path='/login' element={<Login currentUser={this.state.currentUser}/>}/>
                         <Route path='/logout' element={<Logout currentUser={this.state.currentUser}/>}/>

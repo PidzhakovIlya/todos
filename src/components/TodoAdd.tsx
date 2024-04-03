@@ -1,6 +1,7 @@
 import {ChangeEvent, Component, FormEvent} from "react";
 import {Navigate} from "react-router-dom";
 import {add} from "../api/api";
+import {UserInfo} from "@firebase/auth";
 
 
 export type FormDataType = {
@@ -15,11 +16,11 @@ export type FormDataType = {
 }
 
 type TodoAddPropsType = {
-    add: (deed: FormDataType) => void
-    currentUser:any
+    add: (deed: any) => void
+    currentUser:UserInfo
 }
 
-export class TodoAdd extends Component <any> {
+export class TodoAdd extends Component <TodoAddPropsType> {
     formData: FormDataType = {
         title:'',
         email: '',
@@ -75,7 +76,7 @@ export class TodoAdd extends Component <any> {
         const date = new Date();
         newDeed.done = false;
         newDeed.createdAt = date.toLocaleDateString();
-        const addedDeed = await add(this.props.currenUser, newDeed);
+        const addedDeed = await add(this.props.currentUser, newDeed);
         debugger
         this.props.add(addedDeed);
         debugger
@@ -83,9 +84,10 @@ export class TodoAdd extends Component <any> {
     }
 
     render() {
-        if (this.state.redirect) {
-            return <Navigate to="/"/>
-        } else
+        if (!this.props.currentUser){
+            <Navigate to="/login" replace/>
+        } else if(this.state.redirect) {
+            return <Navigate to="/"/>}
             return (
                 <section>
                     <h1>Создать новую задачу</h1>
