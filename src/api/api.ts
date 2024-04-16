@@ -1,17 +1,18 @@
 import {getAuth, signInWithEmailAndPassword, signOut} from "firebase/auth"
 import {get, getDatabase, push, query, ref, remove, set} from "firebase/database"
 import {UserInfo} from "@firebase/auth";
+import firebase from "firebase/compat";
+import FirebaseError = firebase.FirebaseError;
 
 export async function login(email: string | null | undefined, password: string | undefined ) {
     try {
-        debugger
         if (email && password) {
             const oUC = await signInWithEmailAndPassword(getAuth(), email, password);
             return oUC.user
         }
 
-    } catch (err: any) {
-        return err.code
+    } catch (err) {
+        return (err as FirebaseError).code
     }
 }
 
