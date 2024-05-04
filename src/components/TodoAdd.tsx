@@ -71,8 +71,9 @@ export class TodoAdd extends Component <TodoAddPropsType> {
     }
 
     async handleFormSubmit(e: FormEvent<HTMLFormElement>) {
+        debugger
         e.preventDefault();
-        const newDeed = {...this.formData};
+        let newDeed = {...this.formData};
         const date = new Date();
         newDeed.done = false;
         newDeed.createdAt = date.toLocaleDateString();
@@ -131,4 +132,14 @@ export class TodoAdd extends Component <TodoAddPropsType> {
                 </section>
             )
     }
+}
+
+
+
+export type deedType = {
+	createdAt: string;
+	desc: string;
+	done: boolean;
+	image: string;
+	title: string;
 }

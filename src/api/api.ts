@@ -1,8 +1,9 @@
 import {getAuth, signInWithEmailAndPassword, signOut} from "firebase/auth"
 import {get, getDatabase, push, query, ref, remove, set} from "firebase/database"
 import {UserInfo} from "@firebase/auth";
-import firebase from "firebase/compat";
+import firebase from "firebase/compat/app";
 import FirebaseError = firebase.FirebaseError;
+import {deedType} from "../components/TodoAdd";
 
 export async function login(email: string | null | undefined, password: string | undefined ) {
     try {
@@ -20,7 +21,7 @@ export const logout = async () => {
     await signOut(getAuth());
 }
 
-export const add = async (user: any, deed: any) => {
+export const add = async (user: UserInfo, deed: deedType) => {
     const oRef = await push(
         ref(
             getDatabase(),
@@ -34,7 +35,7 @@ export const add = async (user: any, deed: any) => {
     return oDeed
 }
 
-export const getList = async (user:any)=>{ debugger
+export const getList = async (user:UserInfo)=>{
     const oSnapshot = await get(query(ref(getDatabase(), `users/${user.uid}/todos`)));
     const oArr:UserInfo[] = [];
     let oDeed;
