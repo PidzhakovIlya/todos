@@ -6,11 +6,6 @@ import {FormDataType} from "../TodoAdd";
 
 type RegisterPropsType = {}
 
-// export type FormDataType = {
-//     email: string | null
-//     password?: string
-//     title?:string
-// }
 
 export class Register extends React.Component<any> {
     formData: FormDataType = {
